@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ShelfOps — Ecom Merchant Ops Pack</title>
+<meta name="description" content="Google Sheets sales/SKU/ROAS/refunds pack for Shopify merchants. Digital download. £79 Lite / £129 Standard.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#0c0e12; --bg-2:#12151b; --card:#161a22; --card-2:#1c212b;
+  --line:#2a3140; --line-2:#3a4254; --text:#e8ebf0; --muted:#9aa3b5;
+  --faint:#6d7688; --accent:#7b93ff; --accent-2:#9bb0ff;
+  --accent-dim:rgba(123,147,255,.14); --ok:#5dcca8; --radius:12px;
+  --shadow:0 12px 40px rgba(0,0,0,.28); --max:960px;
+  --sans:"IBM Plex Sans","Segoe UI",system-ui,-apple-system,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+*{box-sizing:border-box} body{margin:0;font-family:var(--sans);background:var(--bg);color:var(--text);line-height:1.6;font-size:17px;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(900px 480px at 12% -10%,rgba(123,147,255,.09),transparent 60%),radial-gradient(700px 400px at 100% 0%,rgba(93,204,168,.05),transparent 50%);z-index:0}
+a{color:var(--accent-2);text-underline-offset:3px} a:hover{color:#c5d0ff}
+.wrap{width:min(var(--max),calc(100% - 40px));margin:0 auto;position:relative;z-index:1}
+header{position:sticky;top:0;z-index:10;backdrop-filter:blur(12px);background:rgba(12,14,18,.82);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;min-height:64px;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;color:var(--text);text-decoration:none;font-weight:600}
+.mark{width:28px;height:28px;border-radius:7px;background:var(--accent);display:grid;place-items:center;color:#0c0e12;font-weight:700;font-size:13px;font-family:var(--mono)}
+.btn{display:inline-flex;align-items:center;justify-content:center;background:var(--accent);color:#0c0e12;font-weight:600;border:0;border-radius:8px;padding:11px 18px;text-decoration:none;font-size:15px}
+.btn:hover{background:var(--accent-2);color:#0c0e12}.btn-ghost{background:transparent;color:var(--text);border:1px solid var(--line-2)}.btn-ghost:hover{background:var(--card);border-color:var(--muted)}
+.btn-lg{padding:13px 22px;font-size:16px}.btn[aria-disabled="true"],.btn.disabled{opacity:.55;pointer-events:none;cursor:not-allowed}
+.hero{padding:64px 0 40px}.eyebrow{color:var(--accent-2);font-size:13px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;margin:0 0 16px}
+h1,h2,h3{line-height:1.2;letter-spacing:-.02em;font-weight:600}
+h1{font-size:clamp(30px,4.8vw,44px);margin:0 0 16px;max-width:20ch} h2{font-size:clamp(22px,3vw,30px);margin:0 0 14px} h3{font-size:18px;margin:0 0 8px}
+.lede{font-size:18px;color:var(--muted);max-width:62ch;margin:0 0 22px}
+section{padding:52px 0}.sec-kicker{color:var(--faint);font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;margin:0 0 10px}
+.prose{max-width:68ch;color:var(--muted)}.prose p{margin:0 0 14px}.prose strong{color:var(--text)}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:24px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:26px;box-shadow:var(--shadow)}
+.card.featured{border-color:var(--accent);background:linear-gradient(180deg,var(--accent-dim),var(--card) 42%)}
+.price{font-size:36px;font-weight:600;letter-spacing:-.03em;margin:8px 0 4px}.price span{font-size:15px;color:var(--muted);font-weight:500}
+.sku{font-family:var(--mono);font-size:12px;color:var(--faint);margin-bottom:12px}
+.card ul{margin:14px 0 20px;padding:0;list-style:none}
+.card li{position:relative;padding:6px 0 6px 22px;color:var(--muted);font-size:15px}
+.card li::before{content:"";position:absolute;left:0;top:14px;width:8px;height:8px;border-radius:50%;background:var(--ok)}
+.list{margin:0;padding:0;list-style:none}.list li{padding:8px 0;border-bottom:1px solid var(--line);color:var(--muted)}.list li:last-child{border:0}
+.faq details{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 18px;margin:0 0 10px}
+.faq summary{cursor:pointer;font-weight:600;color:var(--text)}.faq p{margin:10px 0 0;color:var(--muted);font-size:15px}
+.note{font-size:13.5px;color:var(--faint);margin-top:14px}
+footer{border-top:1px solid var(--line);padding:28px 0 48px;color:var(--faint);font-size:13.5px}
+.cta-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.badge{display:inline-block;font-size:12px;font-family:var(--mono);color:var(--faint);border:1px solid var(--line);border-radius:999px;padding:4px 10px}
+form.wait{display:grid;gap:12px;max-width:420px;margin-top:18px}
+form.wait label{display:grid;gap:6px;font-size:14px;color:var(--muted)}
+form.wait input{background:var(--bg-2);border:1px solid var(--line-2);border-radius:8px;padding:11px 12px;color:var(--text);font:inherit}
+form.wait button{justify-self:start}
+@media (max-width:720px){.cards{grid-template-columns:1fr}.nav .btn{display:none}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header><div class="wrap nav">
+  <a class="brand" href="#"><span class="mark">SO</span>ShelfOps</a>
+  <div class="cta-row"><a class="btn" href="#buy">Get started</a></div>
+</div></header>
+<main id="main">
+
+<section class="hero"><div class="wrap">
+  <p class="eyebrow">ShelfOps · Ecom ops pack</p>
+  <h1>Stop running your store from 14 random Sheets tabs.</h1>
+  <p class="lede">One pack: sales · SKU · ROAS · refunds — import in under an hour. Built for small Shopify merchants who already export CSVs.</p>
+  <div class="cta-row">
+    <a class="btn btn-lg" id="cta-lite"  href="https://censusmap.lemonsqueezy.com/checkout/buy/14d283ba-8791-4147-8c87-7305ffac0995" data-ls="LIVE">Buy Lite · £79</a>
+    <a class="btn btn-lg btn-ghost" id="cta-std"  href="https://censusmap.lemonsqueezy.com/checkout/buy/b0b56c85-d50c-4377-8602-b510bdfe3e42" data-ls="LIVE">Buy Standard · £129</a>
+    <span class="badge">Zip · not a Shopify app</span>
+  </div>
+</div></section>
+<section><div class="wrap">
+  <p class="sec-kicker">Who it’s for</p>
+  <div class="prose">
+    <p><strong>Yes:</strong> Solo / 1–2 person ecom ops in Shopify Admin + Sheets; merchants using Matrixify / EZ Exporter / native CSV; freelancers who need a reusable ops pack — not another $50/mo analytics seat.</p>
+    <p><strong>No:</strong> Live BI / Looker / Triple Whale replacement; agency white-label SaaS; anyone expecting a Partner app install.</p>
+  </div>
+</div></section>
+<section><div class="wrap">
+  <p class="sec-kicker">In the zip</p>
+  <ul class="list">
+    <li>Sales Daily Sheet starter — revenue, orders, AOV, discounts</li>
+    <li>SKU Performance — units, revenue, refund qty, net</li>
+    <li>ROAS by Channel — spend, attributed revenue, ROAS, CPA</li>
+    <li>Refunds Log — reason codes, SKU, restock, notes</li>
+    <li>Import &amp; Setup guide + Weekly Ops Checklist + README with SAMPLE rows</li>
+  </ul>
+</div></section>
+<section id="buy"><div class="wrap">
+  <p class="sec-kicker">Pricing</p>
+  <h2>One-time digital download</h2>
+  <div class="cards">
+    <div class="card">
+      <div class="sku">SHELFOPS-LITE</div>
+      <h3>Lite</h3>
+      <div class="price">£79 <span>GBP</span></div>
+      <ul>
+        <li>Four Sheets starters</li>
+        <li>Import &amp; Setup guide</li>
+        <li>Weekly Ops Checklist</li>
+      </ul>
+      <a class="btn" id="buy-lite"  href="https://censusmap.lemonsqueezy.com/checkout/buy/14d283ba-8791-4147-8c87-7305ffac0995" data-ls="LIVE">Checkout Lite · £79</a>
+    </div>
+    <div class="card featured">
+      <div class="sku">SHELFOPS-STANDARD</div>
+      <h3>Standard</h3>
+      <div class="price">£129 <span>GBP</span></div>
+      <ul>
+        <li>Everything in Lite</li>
+        <li>Deeper ROAS channel notes</li>
+        <li>Refunds triage in setup guide</li>
+      </ul>
+      <a class="btn" id="buy-standard"  href="https://censusmap.lemonsqueezy.com/checkout/buy/b0b56c85-d50c-4377-8602-b510bdfe3e42" data-ls="LIVE">Checkout Standard · £129</a>
+    </div>
+  </div>
+  <p class="note">30-day “files won’t open / templates corrupted” refund — email your receipt. Checkout subdomain: censusmap.lemonsqueezy.com until ShelfOps store unlocks.</p>
+</div></section>
+<section><div class="wrap faq">
+  <p class="sec-kicker">FAQ</p>
+  <details open><summary>Is this a Shopify app?</summary><p>No. Offline Sheets templates + a short setup guide. No Partner app.</p></details>
+  <details><summary>Do you connect to my store?</summary><p>No. You export CSV and import/paste. Your data stays in your Drive.</p></details>
+  <details><summary>Will this replace Triple Whale / a BI stack?</summary><p>No. Thin ops clarity for this week — not a full attribution suite.</p></details>
+</div></section>
+
+</main>
+<footer><div class="wrap">
+  <p>ShelfOps · Digital product · Instant download via Lemon Squeezy · Stealth / pseudonym brand</p>
+  <p class="note">Checkout currently on censusmap.lemonsqueezy.com (shared store until separate LS stores unlock). Not affiliated with Shopify Inc. beyond intended merchant use.</p>
+</div></footer>
+</body></html>

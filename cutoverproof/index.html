@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CutoverProof — Data Migration Cutover Proof Kit</title>
+<meta name="description" content="Prove source ↔ target parity before go-live. Row counts, key existence, field diffs, go/no-go. £99 / £149 digital kit.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#0c0e12; --bg-2:#12151b; --card:#161a22; --card-2:#1c212b;
+  --line:#2a3140; --line-2:#3a4254; --text:#e8ebf0; --muted:#9aa3b5;
+  --faint:#6d7688; --accent:#7b93ff; --accent-2:#9bb0ff;
+  --accent-dim:rgba(123,147,255,.14); --ok:#5dcca8; --radius:12px;
+  --shadow:0 12px 40px rgba(0,0,0,.28); --max:960px;
+  --sans:"IBM Plex Sans","Segoe UI",system-ui,-apple-system,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+*{box-sizing:border-box} body{margin:0;font-family:var(--sans);background:var(--bg);color:var(--text);line-height:1.6;font-size:17px;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(900px 480px at 12% -10%,rgba(123,147,255,.09),transparent 60%),radial-gradient(700px 400px at 100% 0%,rgba(93,204,168,.05),transparent 50%);z-index:0}
+a{color:var(--accent-2);text-underline-offset:3px} a:hover{color:#c5d0ff}
+.wrap{width:min(var(--max),calc(100% - 40px));margin:0 auto;position:relative;z-index:1}
+header{position:sticky;top:0;z-index:10;backdrop-filter:blur(12px);background:rgba(12,14,18,.82);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;min-height:64px;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;color:var(--text);text-decoration:none;font-weight:600}
+.mark{width:28px;height:28px;border-radius:7px;background:var(--accent);display:grid;place-items:center;color:#0c0e12;font-weight:700;font-size:13px;font-family:var(--mono)}
+.btn{display:inline-flex;align-items:center;justify-content:center;background:var(--accent);color:#0c0e12;font-weight:600;border:0;border-radius:8px;padding:11px 18px;text-decoration:none;font-size:15px}
+.btn:hover{background:var(--accent-2);color:#0c0e12}.btn-ghost{background:transparent;color:var(--text);border:1px solid var(--line-2)}.btn-ghost:hover{background:var(--card);border-color:var(--muted)}
+.btn-lg{padding:13px 22px;font-size:16px}.btn[aria-disabled="true"],.btn.disabled{opacity:.55;pointer-events:none;cursor:not-allowed}
+.hero{padding:64px 0 40px}.eyebrow{color:var(--accent-2);font-size:13px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;margin:0 0 16px}
+h1,h2,h3{line-height:1.2;letter-spacing:-.02em;font-weight:600}
+h1{font-size:clamp(30px,4.8vw,44px);margin:0 0 16px;max-width:20ch} h2{font-size:clamp(22px,3vw,30px);margin:0 0 14px} h3{font-size:18px;margin:0 0 8px}
+.lede{font-size:18px;color:var(--muted);max-width:62ch;margin:0 0 22px}
+section{padding:52px 0}.sec-kicker{color:var(--faint);font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;margin:0 0 10px}
+.prose{max-width:68ch;color:var(--muted)}.prose p{margin:0 0 14px}.prose strong{color:var(--text)}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:24px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:26px;box-shadow:var(--shadow)}
+.card.featured{border-color:var(--accent);background:linear-gradient(180deg,var(--accent-dim),var(--card) 42%)}
+.price{font-size:36px;font-weight:600;letter-spacing:-.03em;margin:8px 0 4px}.price span{font-size:15px;color:var(--muted);font-weight:500}
+.sku{font-family:var(--mono);font-size:12px;color:var(--faint);margin-bottom:12px}
+.card ul{margin:14px 0 20px;padding:0;list-style:none}
+.card li{position:relative;padding:6px 0 6px 22px;color:var(--muted);font-size:15px}
+.card li::before{content:"";position:absolute;left:0;top:14px;width:8px;height:8px;border-radius:50%;background:var(--ok)}
+.list{margin:0;padding:0;list-style:none}.list li{padding:8px 0;border-bottom:1px solid var(--line);color:var(--muted)}.list li:last-child{border:0}
+.faq details{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 18px;margin:0 0 10px}
+.faq summary{cursor:pointer;font-weight:600;color:var(--text)}.faq p{margin:10px 0 0;color:var(--muted);font-size:15px}
+.note{font-size:13.5px;color:var(--faint);margin-top:14px}
+footer{border-top:1px solid var(--line);padding:28px 0 48px;color:var(--faint);font-size:13.5px}
+.cta-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.badge{display:inline-block;font-size:12px;font-family:var(--mono);color:var(--faint);border:1px solid var(--line);border-radius:999px;padding:4px 10px}
+form.wait{display:grid;gap:12px;max-width:420px;margin-top:18px}
+form.wait label{display:grid;gap:6px;font-size:14px;color:var(--muted)}
+form.wait input{background:var(--bg-2);border:1px solid var(--line-2);border-radius:8px;padding:11px 12px;color:var(--text);font:inherit}
+form.wait button{justify-self:start}
+@media (max-width:720px){.cards{grid-template-columns:1fr}.nav .btn{display:none}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header><div class="wrap nav">
+  <a class="brand" href="#"><span class="mark">CP</span>CutoverProof</a>
+  <div class="cta-row"><a class="btn" href="#buy">Get started</a></div>
+</div></header>
+<main id="main">
+
+<section class="hero"><div class="wrap">
+  <p class="eyebrow">CutoverProof · Migration recon kit</p>
+  <h1>Prove source ↔ target parity before go-live.</h1>
+  <p class="lede">Row counts, key existence, field-level diffs, exception reports, and a written go / no-go sign-off. <strong>Not</strong> a SOC2 pack. <strong>Not</strong> a compliance audit.</p>
+  <div class="cta-row">
+    <a class="btn btn-lg" href="https://censusmap.lemonsqueezy.com/checkout/buy/5927b76b-f14f-400c-aa52-d499f7e92958">Buy CutoverProof · £99</a>
+    <span class="badge">One migration weekend</span>
+  </div>
+</div></section>
+<section><div class="wrap prose">
+  <p class="sec-kicker">The weekend problem</p>
+  <p>Count-only checks can pass while missing and extra rows cancel. You need mapping, control totals, key-existence diffs, field exceptions, and a stakeholder sign-off — without a $15k–$30k/yr Datafold seat.</p>
+</div></section>
+<section id="buy"><div class="wrap">
+  <p class="sec-kicker">Pricing</p>
+  <h2>Instant download · no seats</h2>
+  <div class="cards">
+    <div class="card">
+      <div class="sku">CUTOVER-99</div>
+      <h3>Kit</h3>
+      <div class="price">£99 <span>GBP</span></div>
+      <ul>
+        <li>Cutover reconcile runbook</li>
+        <li>Mapping + go/no-go checklists</li>
+        <li>Sample Postgres SQL</li>
+        <li>Exception CSV schema + samples</li>
+      </ul>
+      <a class="btn" id="buy-99"  href="https://censusmap.lemonsqueezy.com/checkout/buy/5927b76b-f14f-400c-aa52-d499f7e92958" data-ls="LIVE">Checkout · £99</a>
+    </div>
+    <div class="card featured">
+      <div class="sku">CUTOVER-149</div>
+      <h3>Full thin MVP</h3>
+      <div class="price">£149 <span>GBP</span></div>
+      <ul>
+        <li>Everything in £99</li>
+        <li>Richer SQL comments</li>
+        <li>Fixture walkthrough notes</li>
+      </ul>
+      <a class="btn" id="buy-149"  href="https://censusmap.lemonsqueezy.com/checkout/buy/5dd8ec42-322d-41d3-b4bf-a3956d8ebb9d" data-ls="LIVE">Checkout · £149</a>
+    </div>
+  </div>
+  <p class="note">Checkout subdomain: censusmap.lemonsqueezy.com until CutoverProof store unlocks. Separate brand from CensusMap.</p>
+</div></section>
+<section><div class="wrap faq">
+  <p class="sec-kicker">What you do not get</p>
+  <details open><summary>SOC2 / ISO / audit theater?</summary><p>No. This is cutover proof artifacts for one migration — not a trust-center pack.</p></details>
+  <details><summary>Hosted SaaS or live recon?</summary><p>No. Digital kit only. Keep evaluating Datafold / Soda if you need a platform.</p></details>
+</div></section>
+
+</main>
+<footer><div class="wrap">
+  <p>CutoverProof · Digital product · Instant download via Lemon Squeezy · Stealth / pseudonym brand</p>
+  <p class="note">Checkout currently on censusmap.lemonsqueezy.com (shared store until separate LS stores unlock). Not affiliated with Shopify Inc. beyond intended merchant use.</p>
+</div></footer>
+</body></html>
