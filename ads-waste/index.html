@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ads Waste CSV Grader</title>
+<meta name="robots" content="noindex,nofollow">
+<style>
+body{font-family:system-ui,sans-serif;max-width:52rem;margin:2rem auto;padding:0 1rem;line-height:1.45;color:#111}
+.cta{display:inline-block;background:#111;color:#fff;padding:.8rem 1.1rem;border-radius:8px;text-decoration:none;font-weight:600;margin:.35rem .35rem 0 0}
+.cta2{background:#fff;color:#111;border:2px solid #111}
+.note{background:#fff3cd;padding:.7rem 1rem;border-radius:8px;font-size:.92rem}
+table{border-collapse:collapse;width:100%;font-size:.82rem;margin:1rem 0}
+th,td{border:1px solid #ddd;padding:.35rem;text-align:left}
+th{background:#f6f6f6}
+input[type=file]{margin:1rem 0}
+.muted{color:#555;font-size:.9rem}
+</style>
+</head>
+<body>
+<p class="note"><strong>Privacy:</strong> CSV stays in your browser. Nothing uploads to our servers.</p>
+<h1>Ads Waste CSV Grader</h1>
+<p>Export <strong>Ad-level</strong> data from Meta Ads Manager, drop the CSV here, get kill candidates. Then unlock the weekly Kill Sheet pack.</p>
+<input id="f" type="file" accept=".csv,text/csv">
+<div id="out" class="muted">Waiting for CSV…</div>
+<p>
+  <a class="cta" id="buy" href="CHECKOUT_URL">Get Kill Sheet pack — £79</a>
+  <a class="cta cta2" href="/kill-sheet/">Kill Sheet landing</a>
+</p>
+<script>
+const aliases={
+  ad_name:['Ad name','Ad Name','ad_name'],
+  adset_name:['Ad set name','Ad Set Name','Adset name'],
+  campaign_name:['Campaign name','Campaign Name'],
+  spend:['Amount spent (GBP)','Amount spent (USD)','Amount spent (EUR)','Amount spent','Spend'],
+  purchases:['Purchases','Website purchases','Results'],
+  ctr:['CTR (link click-through rate)','CTR (all)','CTR'],
+  cpc:['CPC (cost per link click)','CPC (cost per click)','CPC'],
+  frequency:['Frequency'],
+  roas:['Purchase ROAS (return on ad spend)','Website purchase ROAS (return on ad spend)','ROAS'],
+  quality:['Quality ranking'],
+  engagement_rank:['Engagement rate ranking']
+};
+function parseCSV(text){
+  const rows=[];let row=[],cur='',q=false;
+  for(let i=0;i<text.length;i++){
+    const c=text[i],n=text[i+1];
+    if(c==='"'){if(q&&n==='"'){cur+='"';i++;}else q=!q;}
+    else if(c===','&&!q){row.push(cur);cur='';}
+    else if((c==='\n'||c==='\r')&&!q){if(c==='\r'&&n==='\n')i++;row.push(cur);if(row.some(x=>x!==''))rows.push(row);row=[];cur='';}
+    else cur+=c;
+  }
+  if(cur.length||row.length){row.push(cur);rows.push(row);}
+  return rows;
+}
+function num(v){if(v==null)return 0;const s=String(v).replace(/[^0-9.\-]/g,'');const n=parseFloat(s);return isNaN(n)?0:n;}
+function pick(header,keys){
+  for(const k of keys){const i=header.indexOf(k);if(i>=0)return i;}
+  return -1;
+}
+function score(r){
+  let s=0,why=[];
+  if(r.spend>=50&&r.purchases<=0){s+=40;why.push('spend w/ 0 purchases');}
+  if(r.ctr>0&&r.ctr<0.5){s+=15;why.push('low CTR '+r.ctr.toFixed(2)+'%');}
+  if(r.cpc>=1){s+=10;why.push('CPC '+r.cpc.toFixed(2));}
+  if(r.frequency>=2.2){s+=12;why.push('freq '+r.frequency.toFixed(2));}
+  const bad=(r.quality||'').toLowerCase().includes('below')||(r.engagement_rank||'').toLowerCase().includes('below');
+  if(bad){s+=10;why.push('below-avg quality/engagement');}
+  const waste=r.purchases<=0?r.spend*0.85:r.spend*0.15;
+  return {s,why,waste};
+}
+document.getElementById('f').addEventListener('change',async(e)=>{
+  const file=e.target.files[0]; if(!file)return;
+  const text=await file.text();
+  const rows=parseCSV(text); if(rows.length<2){document.getElementById('out').textContent='Could not parse CSV';return;}
+  const header=rows[0].map(h=>h.trim());
+  const idx={}; for(const [k,alts] of Object.entries(aliases)) idx[k]=pick(header,alts);
+  if(idx.spend<0||idx.ad_name<0){document.getElementById('out').textContent='Need at least Ad name + Amount spent columns.';return;}
+  const ads=[];
+  for(let i=1;i<rows.length;i++){
+    const row=rows[i]; if(!row||!row.length)continue;
+    const get=k=>idx[k]>=0?row[idx[k]]:'';
+    const rec={
+      ad_name:get('ad_name')||'(unnamed)',
+      adset_name:get('adset_name')||'',
+      campaign_name:get('campaign_name')||'',
+      spend:num(get('spend')),
+      purchases:num(get('purchases')),
+      ctr:num(get('ctr')),
+      cpc:num(get('cpc')),
+      frequency:num(get('frequency')),
+      roas:num(get('roas')),
+      quality:get('quality')||'',
+      engagement_rank:get('engagement_rank')||''
+    };
+    if(rec.spend<=0)continue;
+    const sc=score(rec); ads.push({...rec,...sc});
+  }
+  ads.sort((a,b)=>b.s-a.s);
+  const total=ads.reduce((a,b)=>a+b.spend,0);
+  const waste=ads.reduce((a,b)=>a+b.waste,0);
+  const kills=ads.filter(a=>a.s>=25);
+  let html=`<p><strong>${ads.length}</strong> ads · spend <strong>£${total.toFixed(0)}</strong> · est. waste <strong>£${waste.toFixed(0)}</strong> (${total?Math.round(100*waste/total):0}%) · kill candidates <strong>${kills.length}</strong></p>`;
+  html+='<table><tr><th>Score</th><th>Ad</th><th>Spend</th><th>Why</th></tr>';
+  for(const a of ads.slice(0,8)){
+    html+=`<tr><td>${a.s}</td><td>${a.ad_name}<div class="muted">${a.campaign_name}</div></td><td>£${a.spend.toFixed(2)}</td><td>${a.why.join('; ')||'—'}</td></tr>`;
+  }
+  html+='</table><p class="muted">Next: pause top kills in Ads Manager, then use the Kill Sheet pack for the weekly ritual.</p>';
+  document.getElementById('out').innerHTML=html;
+});
+</script>
+</body>
+</html>
